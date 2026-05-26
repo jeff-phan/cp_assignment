@@ -1,0 +1,143 @@
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+int main()
+{
+	cout << "CNC MILLING MACHINE PERFORMANCE MONITORING (Max 10 machines)" << endl;
+
+	int machine_no = 0;
+	float temp[10], rpm[10], vibration_lvl[10];
+	char repeat;
+	do
+	{
+		//Get input for each machine
+		cout << endl << "Enter data for Machine " << machine_no + 1 << endl;
+		cout << "Drill tip temperature with flood coolant (Normal range: < 100 degree Celcius): ";
+		cin >> temp[machine_no];
+		cout << "Drill tip operating RPM (Normal range: 4000RPM - 8000RPM): ";
+		cin >> rpm[machine_no];
+		cout << "Machine's vibration levels (Normal range: < 2.0 mm/s RMS): ";
+		cin >> vibration_lvl[machine_no];
+
+		cout << endl << "Do you want to enter data for another machine? (Y/N): ";
+		cin >> repeat;
+
+		machine_no++;
+	} while (repeat == 'Y' || repeat == 'y');
+
+	//Check if inputs for each machine are in normal range and assign TRUE(normal) / FALSE(abnormal) value
+	bool check_temp[10], check_rpm[10], check_vibration_lvl[10];
+	for (int i = 0; i <= machine_no; i++)
+	{
+		if (temp[i] < 60 || temp[i] > 100)
+		{
+			check_temp[i] = false;
+		}
+		else
+		{
+			check_temp[i] = true;
+		}
+
+		if (rpm[i] < 4000 || rpm[i] > 8000)
+		{
+			check_rpm[i] = false;
+		}
+		else
+		{
+			check_rpm[i] = true;
+		}
+
+		if (vibration_lvl[i] >= 2.0)
+		{
+			check_vibration_lvl[i] = false;
+		}
+		else
+		{
+			check_vibration_lvl[i] = true;
+		}
+	}
+
+	int fault_count[10] = { 0 };
+	cout << endl << endl << "STATUS REPORT PER MACHINE" << endl << "---------------------------------";
+	for (int j = 0; j < machine_no; j++)
+	{
+		cout << endl << "Machine " << j + 1 << ":" << endl;
+		if (check_temp[j] && check_rpm[j] && check_vibration_lvl[j])	//If all condition is TRUE(normal), outputs normal condition
+		{
+			cout << "In normal condition" << endl;
+		}
+		else	//Check for the different types of faulty condition and outputs its corresponding message
+		{
+			if (!check_temp[j])
+			{
+				cout << "Overheating" << endl;
+				fault_count[j] += 1;
+			}
+
+			if (!check_rpm[j])
+			{
+				cout << "Drill tip spinning abnormally" << endl;
+				fault_count[j] += 1;
+			}
+
+			if (!check_vibration_lvl[j])
+			{
+				cout << "Excessive machine vibration" << endl;
+				fault_count[j] += 1;
+			}
+		}
+	}
+
+	//Assign vector with the particular machine number after checking for the worst performing machine in relevancy of total faulty condition
+	vector<pair<string, int>> check_worst_performing; 
+	for (int l = 0; l <= machine_no; l++)
+	{
+		if (fault_count[l] == fault_count[l - 1])	//If there is the same number of faulty conditions with the previous machine, add it to the vector
+		{
+			check_worst_performing.emplace_back("Machine", l);
+		}
+		else if (fault_count[l] == 3)	//If there is a higher number of faulty condition when compare to the previous machine, clear the vector consisting the lower number of faulty conditions and add the machine with the higher number of faulty conditions
+		{
+			check_worst_performing.clear();
+			check_worst_performing.emplace_back("Machine", l);
+		}
+		else if (fault_count[l] == 2)
+		{
+			check_worst_performing.clear();
+			check_worst_performing.emplace_back("Machine", l);
+		}
+		else if (fault_count[l] == 1)
+		{
+			check_worst_performing.clear();
+			check_worst_performing.emplace_back("Machine", l);
+		}
+		else if (fault_count[l] == 0)
+		{
+			check_worst_performing.clear();
+			check_worst_performing.emplace_back("Machine", l);
+		}
+	}
+
+	//Assigned the number of faulty machine detected
+	int faulty_machine = 0;
+	for (int k = 0; k <= machine_no; k++)
+	{
+		if (fault_count[k] > 0)
+		{
+			faulty_machine += 1;
+		}
+	}
+
+	//Print the outputs
+	cout << "---------------------------------" << endl;
+	cout << endl << "Worst performing machine: ";
+	for (auto count : check_worst_performing)	//Range-based for loop that runs the number of times corresponding to the total elements in the vector
+	{
+		cout << count.first << " " << count.second << ", ";		//Outputs the first part then the second part of the vector of pairs
+	}
+	cout << endl << "Number of faulty machine: " << faulty_machine << endl;
+
+	return 0 ;
+}
