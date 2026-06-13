@@ -14,47 +14,26 @@ int main()
 {
 	cout << "CNC MILLING MACHINE PERFORMANCE MONITORING (Max 10 machines)" << endl;
 
+	//Get input from input.txt file
 	ifstream machine_input("input.txt", ios::in);
 	float temp[10], rpm[10], vibration_lvl[10];
 	int machine_no = 0;
 	
-	if (machine_input)
+	if (machine_input)	
 	{
-		for (int h = 0; machine_input >> temp[h]; h++)
+		for (int h = 0; machine_input >> temp[h]; h++)	//For loop runs as long as input from machine_input stream returns TRUE
 		{
 			machine_input >> rpm[h] >> vibration_lvl[h];
 			machine_no++;
 		}
 	}
-	else
+	else	//If machine_input did not open a file, output error
 	{
 		cout << endl << "Error reading input file" << endl;
 		return 0;
 	}
 
 	machine_input.close();
-
-	/*
-	int machine_no = 0;
-	float temp[10], rpm[10], vibration_lvl[10];
-	char repeat;
-	do
-	{
-		//Get input for each machine
-		cout << endl << "Enter data for Machine " << machine_no + 1 << endl;
-		cout << "Drill tip temperature with flood coolant (Normal range: < 100 degree Celcius): ";
-		machine_input >> temp[machine_no];
-		cout << "Drill tip operating RPM (Normal range: 4000RPM - 8000RPM): ";
-		machine_input >> rpm[machine_no];
-		cout << "Machine's vibration levels (Normal range: < 2.0 mm/s RMS): ";
-		machine_input >> vibration_lvl[machine_no];
-
-		cout << endl << "Do you want to enter data for another machine? (Y/N): ";
-		cin >> repeat;
-
-		machine_no++;
-	} while (repeat == 'Y' || repeat == 'y');
-	*/
 
 	//Check if inputs for each machine are in normal range and assign TRUE(normal) / FALSE(abnormal) value
 	bool check_temp[10], check_rpm[10], check_vibration_lvl[10];
@@ -126,27 +105,27 @@ int main()
 	{
 		if (fault_count[l] == fault_count[l - 1])	//If there is the same number of faulty conditions with the previous machine, add it to the vector
 		{
-			check_worst_performing.emplace_back("Machine", l);
+			check_worst_performing.emplace_back("Machine", l + 1);
 		}
 		else if (fault_count[l] == 3)	//If there is a higher number of faulty condition when compare to the previous machine, clear the vector consisting the lower number of faulty conditions and add the machine with the higher number of faulty conditions
 		{
 			check_worst_performing.clear();
-			check_worst_performing.emplace_back("Machine", l);
+			check_worst_performing.emplace_back("Machine", l + 1);
 		}
-		else if (fault_count[l] == 2)
+		else if ((fault_count[l] == 2) && (fault_count[l] > fault_count[l - 1]))
 		{
 			check_worst_performing.clear();
-			check_worst_performing.emplace_back("Machine", l);
+			check_worst_performing.emplace_back("Machine", l + 1);
 		}
-		else if (fault_count[l] == 1)
+		else if ((fault_count[l] == 1) && (fault_count[l] > fault_count[l - 1]))
 		{
 			check_worst_performing.clear();
-			check_worst_performing.emplace_back("Machine", l);
+			check_worst_performing.emplace_back("Machine", l + 1);
 		}
-		else if (fault_count[l] == 0)
+		else if ((fault_count[l] == 0) && (fault_count[l] > fault_count[l - 1]))
 		{
 			check_worst_performing.clear();
-			check_worst_performing.emplace_back("Machine", l);
+			check_worst_performing.emplace_back("Machine", l + 1);
 		}
 	}
 
