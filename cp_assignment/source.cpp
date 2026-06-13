@@ -144,7 +144,7 @@ int main()
 	cout << endl << "Worst performing machine: ";
 	for (auto count : check_worst_performing)	//Range-based for loop that runs the number of times corresponding to the total elements in the vector
 	{
-		cout << count.machine << " " << count.number << ", ";		//Outputs the first part then the second part of the vector of pairs
+		cout << count.machine << " " << count.number << ", ";		//Outputs the first part then the second part of the vector with struct type
 	}
 	cout << endl << "Number of faulty machine: " << faulty_machine << endl;
 
