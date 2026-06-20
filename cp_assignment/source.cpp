@@ -10,6 +10,8 @@ struct MACHINE
 	int number;
 };
 
+void validateSensors(int machine_no, float temp[], float rpm[], float vibration_lvl[], bool check_temp[], bool check_rpm[], bool check_vibration_lvl[]);
+
 int main()
 {
 	cout << "CNC MILLING MACHINE PERFORMANCE MONITORING (Max 10 machines)" << endl;
@@ -37,35 +39,9 @@ int main()
 
 	//Check if inputs for each machine are in normal range and assign TRUE(normal) / FALSE(abnormal) value
 	bool check_temp[10], check_rpm[10], check_vibration_lvl[10];
-	for (int i = 0; i <= machine_no; i++)
-	{
-		if (temp[i] > 100)
-		{
-			check_temp[i] = false;
-		}
-		else
-		{
-			check_temp[i] = true;
-		}
-
-		if (rpm[i] < 4000 || rpm[i] > 8000)
-		{
-			check_rpm[i] = false;
-		}
-		else
-		{
-			check_rpm[i] = true;
-		}
-
-		if (vibration_lvl[i] >= 2.0)
-		{
-			check_vibration_lvl[i] = false;
-		}
-		else
-		{
-			check_vibration_lvl[i] = true;
-		}
-	}
+	
+	//Function Call for Sensor Validation
+	validateSensors(machine_no, temp, rpm, vibration_lvl, check_temp, check_rpm, check_vibration_lvl);
 
 	int fault_count[10] = { 0 };
 	cout << endl << endl << "STATUS REPORT PER MACHINE" << endl << "---------------------------------";
@@ -149,4 +125,38 @@ int main()
 	cout << endl << "Number of faulty machine: " << faulty_machine << endl;
 
 	return 0 ;
+}
+
+
+void validateSensors(int machine_no, float temp[], float rpm[], float vibration_lvl[], bool check_temp[], bool check_rpm[], bool check_vibration_lvl[])
+{
+	for (int i = 0; i <= machine_no; i++)
+	{
+		if (temp[i] > 100)
+		{
+			check_temp[i] = false;
+		}
+		else
+		{
+			check_temp[i] = true;
+		}
+
+		if (rpm[i] < 4000 || rpm[i] > 8000)
+		{
+			check_rpm[i] = false;
+		}
+		else
+		{
+			check_rpm[i] = true;
+		}
+
+		if (vibration_lvl[i] >= 2.0)
+		{
+			check_vibration_lvl[i] = false;
+		}
+		else
+		{
+			check_vibration_lvl[i] = true;
+		}
+	}
 }
