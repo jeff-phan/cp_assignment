@@ -127,7 +127,7 @@ int main()
 	return 0 ;
 }
 
-
+//Function defination
 void validateSensors(int machine_no, float temp[], float rpm[], float vibration_lvl[], bool check_temp[], bool check_rpm[], bool check_vibration_lvl[])
 {
 	for (int i = 0; i <= machine_no; i++)
