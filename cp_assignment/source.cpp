@@ -76,32 +76,36 @@ int main()
 
 	//Assign vector with the particular machine number after checking for the worst performing machine in relevancy of total faulty condition
 	
-	vector<MACHINE> check_worst_performing; 
-	for (int l = 0; l <= machine_no; l++)
+	vector<MACHINE> check_worst_performing;
+	for (int l = 0; l < machine_no; l++)
 	{
-		if (fault_count[l] == fault_count[l - 1])	//If there is the same number of faulty conditions with the previous machine, add it to the vector
+		if (l > 0 && fault_count[l] == fault_count[l - 1])	//If there is the same number of faulty conditions with the previous machine, add it to the vector
 		{
-			check_worst_performing.emplace_back("Machine", l + 1);
+			check_worst_performing.push_back({ "Machine", l + 1 });
 		}
 		else if (fault_count[l] == 3)	//If there is a higher number of faulty condition when compare to the previous machine, clear the vector consisting the lower number of faulty conditions and add the machine with the higher number of faulty conditions
 		{
 			check_worst_performing.clear();
-			check_worst_performing.emplace_back("Machine", l + 1);
+			check_worst_performing.push_back({ "Machine", l + 1 });
 		}
-		else if ((fault_count[l] == 2) && (fault_count[l] > fault_count[l - 1]))
+		else if (l > 0 && (fault_count[l] == 2) && (fault_count[l] > fault_count[l - 1]))
 		{
 			check_worst_performing.clear();
-			check_worst_performing.emplace_back("Machine", l + 1);
+			check_worst_performing.push_back({ "Machine", l + 1 });
 		}
-		else if ((fault_count[l] == 1) && (fault_count[l] > fault_count[l - 1]))
+		else if (l > 0 && (fault_count[l] == 1) && (fault_count[l] > fault_count[l - 1]))
 		{
 			check_worst_performing.clear();
-			check_worst_performing.emplace_back("Machine", l + 1);
+			check_worst_performing.push_back({ "Machine", l + 1 });
 		}
-		else if ((fault_count[l] == 0) && (fault_count[l] > fault_count[l - 1]))
+		else if (l > 0 && (fault_count[l] == 0) && (fault_count[l] > fault_count[l - 1]))
 		{
 			check_worst_performing.clear();
-			check_worst_performing.emplace_back("Machine", l + 1);
+			check_worst_performing.push_back({ "Machine", l + 1 });
+		}
+		else if (l == 0)
+		{
+			check_worst_performing.push_back({ "Machine", l + 1 });
 		}
 	}
 
